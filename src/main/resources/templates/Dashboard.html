@@ -1,0 +1,1082 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Connect Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: #1A1A1A;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Header with Logo, Name, and Navigation */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: #2A2A2A;
+            z-index: 9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .menu-icon-container {
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .menu-icon {
+            width: 24px;
+            height: 24px;
+            fill: #FF6B6B; /* Red icon */
+            transition: fill 0.3s ease;
+        }
+
+        .menu-icon:hover {
+            fill: #FFFFFF; /* White on hover */
+        }
+
+        .header-name {
+            color: #FF6B6B; /* Name in red */
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        /* Logo Dropdown Menu */
+        .logo-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: #2A2A2A;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            min-width: 150px;
+            z-index: 10;
+        }
+
+        .logo-menu.show {
+            display: block;
+            animation: slideDown 0.3s ease forwards;
+        }
+
+        .logo-menu a {
+            display: block;
+            padding: 10px 15px;
+            color: #FF6B6B; /* Red text */
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: background 0.3s ease, color 0.3s ease;
+            transform: skew(-5deg); /* Subtle angled effect */
+        }
+
+        .logo-menu a:hover {
+            background: #333; /* Darker background on hover for contrast */
+            color: #FFFFFF; /* White on hover */
+        }
+
+        /* Right Side Navigation */
+        .nav-bar {
+            display: flex;
+            justify-content: flex-end;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #FF6B6B; /* Red text */
+            font-size: 0.9em;
+            transition: color 0.3s ease;
+        }
+
+        .nav-item svg {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 5px;
+            fill: #FF6B6B; /* Red icon */
+            transition: fill 0.3s ease;
+        }
+
+        .nav-item:hover {
+            color: #FFFFFF; /* White on hover */
+        }
+
+        .nav-item:hover svg {
+            fill: #FFFFFF; /* White on hover */
+        }
+
+        /* Profile Menu Specific Styles */
+        .profile-menu {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #FF6B6B; /* Text in red */
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .profile-menu:hover {
+            color: #FFFFFF; /* White on hover */
+        }
+
+        .profile-menu svg {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 5px;
+            fill: #FF6B6B; /* Icon in red */
+            transition: fill 0.3s ease;
+        }
+
+        .profile-menu:hover svg {
+            fill: #FFFFFF; /* White on hover */
+        }
+
+        .profile-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: #2A2A2A;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            min-width: 180px;
+            z-index: 10;
+        }
+
+        .profile-dropdown.show {
+            display: block;
+            animation: slideDown 0.3s ease forwards;
+        }
+
+        .profile-dropdown a {
+            display: block;
+            padding: 10px 15px;
+            color: #FF6B6B; /* Dropdown items in red */
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .profile-dropdown a:hover {
+            background: #333; /* Darker background on hover for contrast */
+            color: #FFFFFF; /* White on hover */
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Apply Button Dropdown Styles */
+        .apply-container {
+            position: relative;
+            margin-top: 10px;
+        }
+
+        .apply-button {
+            background: #FF6B6B;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s ease;
+            font-size: 1em;
+        }
+
+        .apply-button:hover {
+            background: #E55A5A;
+        }
+
+        .apply-options {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #2A2A2A;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+        }
+
+        .apply-options.show {
+            display: block;
+            animation: slideDown 0.3s ease forwards;
+        }
+
+        .apply-options a, .apply-options form {
+            display: block;
+            margin: 0;
+        }
+
+        .apply-options a, .apply-options button {
+            display: block;
+            padding: 10px;
+            color: #FF6B6B;
+            text-decoration: none;
+            font-size: 0.9em;
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .apply-options a:hover, .apply-options button:hover {
+            background: #333;
+            color: #FFFFFF;
+        }
+
+        /* Custom Resume Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #2A2A2A;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            color: #fff;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 20px;
+            color: #FF6B6B;
+        }
+
+        .modal-content textarea {
+            width: 100%;
+            height: 200px;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #555;
+            background: #333;
+            color: #fff;
+            resize: vertical;
+        }
+
+        .modal-content .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal-content button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .modal-content .submit-btn {
+            background: #FF6B6B;
+            color: #fff;
+        }
+
+        .modal-content .submit-btn:hover {
+            background: #E55A5A;
+        }
+
+        .modal-content .cancel-btn {
+            background: #555;
+            color: #fff;
+        }
+
+        .modal-content .cancel-btn:hover {
+            background: #777;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 90px 50px 20px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: #2A2A2A;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        .hero h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        .hero p {
+            font-size: 1.5em;
+            color: #BBBBBB;
+            animation: fadeInUp 1s ease forwards 0.3s;
+            opacity: 0;
+        }
+
+        .hero .error {
+            color: #FF6B6B;
+            font-size: 1.2em;
+            margin-top: 10px;
+        }
+
+        /* Job Listings Section */
+        .job-listings {
+            padding: 40px 0;
+            text-align: center;
+            background: #1A1A1A;
+        }
+
+        .job-listings h2 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            color: #FF6B6B;
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        .jobs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .job-card {
+            background: #F7F8FA;
+            color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeInUp 1s ease forwards 0.5s;
+            opacity: 0;
+        }
+
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .job-card h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .job-card p {
+            font-size: 1em;
+            color: #555;
+            margin: 5px 0;
+        }
+
+        /* Internships Section */
+        .internships {
+            padding: 40px 0;
+            text-align: center;
+            background: #1A1A1A;
+        }
+
+        .internships h2 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            color: #FF6B6B;
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        .internships-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .internship-card {
+            background: #F7F8FA;
+            color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeInUp 1s ease forwards 0.6s;
+            opacity: 0;
+        }
+
+        .internship-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .internship-card h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .internship-card p {
+            font-size: 1em;
+            color: #555;
+            margin: 5px 0;
+        }
+
+        /* Applications Section */
+        .applications {
+            padding: 40px 0;
+            text-align: center;
+            background: #1A1A1A;
+        }
+
+        .applications h2 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            color: #FF6B6B;
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        .applications-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .application-card {
+            background: #F7F8FA;
+            color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            animation: fadeInUp 1s ease forwards 0.7s;
+            opacity: 0;
+        }
+
+        .application-card p {
+            font-size: 1em;
+            color: #555;
+            margin: 5px 0;
+        }
+
+        .application-card .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 12px;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+
+        .application-card .status.pending {
+            background: #FFF3CD;
+            color: #856404;
+        }
+
+        .application-card .status.accepted {
+            background: #D4EDDA;
+            color: #155724;
+        }
+
+        .application-card .status.rejected {
+            background: #F8D7DA;
+            color: #721C24;
+        }
+
+        /* Notification Styling */
+        .notification {
+            position: fixed;
+            top: 90px;
+            right: 20px;
+            background: #2A2A2A;
+            color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            display: none;
+        }
+
+        .notification.show {
+            display: block;
+            animation: slideIn 0.5s ease forwards;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(100%); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Footer */
+        footer {
+            padding: 30px 50px;
+            text-align: center;
+            background: #111;
+        }
+
+        footer p {
+            font-size: 1em;
+            color: #888;
+        }
+
+        footer a {
+            color: #FF6B6B;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-name {
+                font-size: 1em;
+            }
+
+            .nav-bar {
+                gap: 20px;
+            }
+
+            .main-content {
+                padding: 90px 20px 20px;
+            }
+
+            .hero h1 {
+                font-size: 2em;
+            }
+
+            .hero p {
+                font-size: 1.2em;
+            }
+
+            .job-listings h2, .internships h2, .applications h2 {
+                font-size: 2em;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .header {
+                height: auto;
+                flex-direction: column;
+                padding: 10px;
+            }
+
+            .header-left {
+                margin-bottom: 10px;
+            }
+
+            .header-name {
+                font-size: 1em;
+            }
+
+            .nav-bar {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+                padding: 10px 0;
+            }
+
+            .profile-menu {
+                position: relative;
+            }
+
+            .profile-dropdown {
+                width: 100%;
+                text-align: center;
+            }
+
+            .main-content {
+                padding: 150px 20px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Main Content -->
+<div class="main-content">
+    <!-- Header with Logo, Name, and Navigation -->
+    <div class="header">
+        <div class="header-left">
+            <div class="menu-icon-container" onclick="toggleLogoMenu()">
+                <svg class="menu-icon" viewBox="0 0 24 24">
+                    <path d="M4 18h16v-2H4v2zm0-5h16v-2H4v2zm0-7v2h16V6H4zm0-4h16V0H4v2zm0 20h16v-2H4v2z"/>
+                </svg>
+            </div>
+            <span class="header-name">Career Connect</span>
+            <div class="logo-menu" id="logoMenu">
+                <a th:href="@{/contact-us}">Contact Us</a>
+                <a th:href="@{/help}">Help</a>
+                <a th:href="@{/app-settings}">App Settings</a>
+            </div>
+        </div>
+        <div class="nav-bar">
+            <a th:href="@{/jobs}" class="nav-item">
+                <svg viewBox="0 0 24 24">
+                    <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                </svg>
+                Home
+            </a>
+            <a th:href="@{/auth/apply}" class="nav-item">
+                <svg viewBox="0 0 24 24">
+                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 1-3-3H2z"/>
+                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 0 3-3h7z"/>
+                </svg>
+                Apply
+            </a>
+            <a th:href="@{/auth/invites}" class="nav-item">
+                <svg viewBox="0 0 24 24">
+                    <path d="M15 19l-7-7 7-7"/>
+                </svg>
+                Invites
+            </a>
+            <div class="profile-menu" onclick="toggleProfileMenu()">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+                Profile
+                <div class="profile-dropdown" id="profileDropdown">
+                    <a th:href="@{/auth/profile}">View Profile</a>
+                    <a th:href="@{/auth/settings}">Settings</a>
+                    <a th:href="@{/auth/resume}">Resume</a>
+                    <a th:href="@{/auth/update-profile}">Update Profile</a>
+                    <a th:href="@{/auth/jobs-applied}">Jobs Applied</a>
+                    <a th:href="@{/auth/watchlist}">Watchlist</a>
+                    <a th:href="@{/logout}">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Welcome Back!</h1>
+        <p>Explore the latest job opportunities tailored for you.</p>
+        <div th:if="${error}" class="error" th:text="${error}"></div>
+    </section>
+
+    <!-- Job Listings Section -->
+    <section class="job-listings">
+        <h2>Job Listings</h2>
+        <div class="jobs-grid">
+            <div th:unless="${jobs.isEmpty()}" th:each="job : ${jobs}" class="job-card">
+                <h3 th:text="${job.title}"></h3>
+                <p th:text="'Company: ' + ${job.company}"></p>
+                <p th:text="'Location: ' + ${job.location}"></p>
+                <p th:text="'Description: ' + ${job.description}"></p>
+                <div class="apply-container">
+                    <button class="apply-button" th:onclick="'toggleApplyOptions(' + ${job.id} + ', \'job\')'">Apply Now</button>
+                    <div class="apply-options" th:id="'apply-options-job-' + ${job.id}">
+                        <a th:href="@{/auth/apply-with-existing/{jobId}(jobId=${job.id})}">Apply with Existing Resume</a>
+                        <a href="#" th:onclick="|showCustomResumeModal(${job.id}, 'job')|">Apply with Custom Resume</a>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${jobs.isEmpty()}" class="job-card">
+                <h3>Software Engineer</h3>
+                <p>Company: TechCorp</p>
+                <p>Location: Remote</p>
+                <p>Description: Develop scalable web applications.</p>
+                <div class="apply-container">
+                    <button class="apply-button" onclick="toggleApplyOptions(1, 'job')">Apply Now</button>
+                    <div class="apply-options" id="apply-options-job-1">
+                        <a th:href="@{/auth/apply-with-existing/1}">Apply with Existing Resume</a>
+                        <a href="#" onclick="showCustomResumeModal(1, 'job')">Apply with Custom Resume</a>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${jobs.isEmpty()}" class="job-card">
+                <h3>Data Scientist</h3>
+                <p>Company: DataInc</p>
+                <p>Location: New York</p>
+                <p>Description: Analyze large datasets for insights.</p>
+                <div class="apply-container">
+                    <button class="apply-button" onclick="toggleApplyOptions(2, 'job')">Apply Now</button>
+                    <div class="apply-options" id="apply-options-job-2">
+                        <a th:href="@{/auth/apply-with-existing/2}">Apply with Existing Resume</a>
+                        <a href="#" onclick="showCustomResumeModal(2, 'job')">Apply with Custom Resume</a>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${jobs.isEmpty()}" class="job-card">
+                <h3>Product Manager</h3>
+                <p>Company: InnovateCo</p>
+                <p>Location: San Francisco</p>
+                <p>Description: Lead product development teams.</p>
+                <div class="apply-container">
+                    <button class="apply-button" onclick="toggleApplyOptions(3, 'job')">Apply Now</button>
+                    <div class="apply-options" id="apply-options-job-3">
+                        <a th:href="@{/auth/apply-with-existing/3}">Apply with Existing Resume</a>
+                        <a href="#" onclick="showCustomResumeModal(3, 'job')">Apply with Custom Resume</a>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${jobs.isEmpty()}" class="job-card">
+                <h3>UX Designer</h3>
+                <p>Company: DesignWorks</p>
+                <p>Location: Austin</p>
+                <p>Description: Create user-friendly interfaces.</p>
+                <div class="apply-container">
+                    <button class="apply-button" onclick="toggleApplyOptions(4, 'job')">Apply Now</button>
+                    <div class="apply-options" id="apply-options-job-4">
+                        <a th:href="@{/auth/apply-with-existing/4}">Apply with Existing Resume</a>
+                        <a href="#" onclick="showCustomResumeModal(4, 'job')">Apply with Custom Resume</a>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${jobs.isEmpty()}" class="job-card">
+                <h3>DevOps Engineer</h3>
+                <p>Company: CloudSys</p>
+                <p>Location: Seattle</p>
+                <p>Description: Manage CI/CD pipelines.</p>
+                <div class="apply-container">
+                    <button class="apply-button" onclick="toggleApplyOptions(5, 'job')">Apply Now</button>
+                    <div class="apply-options" id="apply-options-job-5">
+                        <a th:href="@{/auth/apply-with-existing/5}">Apply with Existing Resume</a>
+                        <a href="#" onclick="showCustomResumeModal(5, 'job')">Apply with Custom Resume</a>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${jobs.isEmpty()}" class="job-card">
+                <h3>Marketing Specialist</h3>
+                <p>Company: MarketPro</p>
+                <p>Location: Chicago</p>
+                <p>Description: Develop marketing campaigns.</p>
+                <div class="apply-container">
+                    <button class="apply-button" onclick="toggleApplyOptions(6, 'job')">Apply Now</button>
+                    <div class="apply-options" id="apply-options-job-6">
+                        <a th:href="@{/auth/apply-with-existing/6}">Apply with Existing Resume</a>
+                        <a href="#" onclick="showCustomResumeModal(6, 'job')">Apply with Custom Resume</a>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${jobs.isEmpty()}" class="job-card">
+                <h3>Backend Developer</h3>
+                <p>Company: CodeBase</p>
+                <p>Location: Remote</p>
+                <p>Description: Build RESTful APIs.</p>
+                <div class="apply-container">
+                    <button class="apply-button" onclick="toggleApplyOptions(7, 'job')">Apply Now</button>
+                    <div class="apply-options" id="apply-options-job-7">
+                        <a th:href="@{/auth/apply-with-existing/7}">Apply with Existing Resume</a>
+                        <a href="#" onclick="showCustomResumeModal(7, 'job')">Apply with Custom Resume</a>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${jobs.isEmpty()}" class="job-card">
+                <h3>AI Researcher</h3>
+                <p>Company: AIInnovations</p>
+                <p>Location: Boston</p>
+                <p>Description: Research machine learning models.</p>
+                <div class="apply-container">
+                    <button class="apply-button" onclick="toggleApplyOptions(8, 'job')">Apply Now</button>
+                    <div class="apply-options" id="apply-options-job-8">
+                        <a th:href="@{/auth/apply-with-existing/8}">Apply with Existing Resume</a>
+                        <a href="#" onclick="showCustomResumeModal(8, 'job')">Apply with Custom Resume</a>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${jobs.isEmpty()}" class="job-card">
+                <h3>Frontend Developer</h3>
+                <p>Company: WebCraft</p>
+                <p>Location: Miami</p>
+                <p>Description: Build responsive web interfaces.</p>
+                <div class="apply-container">
+                    <button class="apply-button" onclick="toggleApplyOptions(9, 'job')">Apply Now</button>
+                    <div class="apply-options" id="apply-options-job-9">
+                        <a th:href="@{/auth/apply-with-existing/9}">Apply with Existing Resume</a>
+                        <a href="#" onclick="showCustomResumeModal(9, 'job')">Apply with Custom Resume</a>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${jobs.isEmpty()}" class="job-card">
+                <h3>Cybersecurity Analyst</h3>
+                <p>Company: SecureNet</p>
+                <p>Location: Washington D.C.</p>
+                <p>Description: Protect systems from threats.</p>
+                <div class="apply-container">
+                    <button class="apply-button" onclick="toggleApplyOptions(10, 'job')">Apply Now</button>
+                    <div class="apply-options" id="apply-options-job-10">
+                        <a th:href="@{/auth/apply-with-existing/10}">Apply with Existing Resume</a>
+                        <a href="#" onclick="showCustomResumeModal(10, 'job')">Apply with Custom Resume</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Internships Section -->
+    <section class="internships">
+        <h2>Internships</h2>
+        <div class="internships-grid">
+            <div th:unless="${internships.isEmpty()}" th:each="internship : ${internships}" class="internship-card">
+                <h3 th:text="${internship.title}"></h3>
+                <p th:text="'Company: ' + ${internship.company}"></p>
+                <p th:text="'Location: ' + ${internship.location}"></p>
+                <p th:text="'Description: ' + ${internship.description}"></p>
+                <div class="apply-container">
+                    <button class="apply-button" th:onclick="'toggleApplyOptions(' + ${internship.id} + ', \'internship\')'">Apply Now</button>
+                    <div class="apply-options" th:id="'apply-options-internship-' + ${internship.id}">
+                        <a th:href="@{/auth/apply-with-existing/internship/{internshipId}(internshipId=${internship.id})}">Apply with Existing Resume</a>
+                        <a href="#" th:onclick="|showCustomResumeModal(${internship.id}, 'internship')|">Apply with Custom Resume</a>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${internships.isEmpty()}" class="internship-card">
+                <h3>Software Engineering Intern</h3>
+                <p>Company: TechCorp</p>
+                <p>Location: Remote</p>
+                <p>Description: Assist in developing web applications.</p>
+                <div class="apply-container">
+                    <button class="apply-button" onclick="toggleApplyOptions(1, 'internship')">Apply Now</button>
+                    <div class="apply-options" id="apply-options-internship-1">
+                        <a th:href="@{/auth/apply-with-existing/internship/1}">Apply with Existing Resume</a>
+                        <a href="#" onclick="showCustomResumeModal(1, 'internship')">Apply with Custom Resume</a>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${internships.isEmpty()}" class="internship-card">
+                <h3>Data Science Intern</h3>
+                <p>Company: DataInc</p>
+                <p>Location: New York</p>
+                <p>Description: Support data analysis projects.</p>
+                <div class="apply-container">
+                    <button class="apply-button" onclick="toggleApplyOptions(2, 'internship')">Apply Now</button>
+                    <div class="apply-options" id="apply-options-internship-2">
+                        <a th:href="@{/auth/apply-with-existing/internship/2}">Apply with Existing Resume</a>
+                        <a href="#" onclick="showCustomResumeModal(2, 'internship')">Apply with Custom Resume</a>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${internships.isEmpty()}" class="internship-card">
+                <h3>Product Management Intern</h3>
+                <p>Company: InnovateCo</p>
+                <p>Location: San Francisco</p>
+                <p>Description: Help manage product roadmaps.</p>
+                <div class="apply-container">
+                    <button class="apply-button" onclick="toggleApplyOptions(3, 'internship')">Apply Now</button>
+                    <div class="apply-options" id="apply-options-internship-3">
+                        <a th:href="@{/auth/apply-with-existing/internship/3}">Apply with Existing Resume</a>
+                        <a href="#" onclick="showCustomResumeModal(3, 'internship')">Apply with Custom Resume</a>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${internships.isEmpty()}" class="internship-card">
+                <h3>UX Design Intern</h3>
+                <p>Company: DesignWorks</p>
+                <p>Location: Austin</p>
+                <p>Description: Design user interfaces.</p>
+                <div class="apply-container">
+                    <button class="apply-button" onclick="toggleApplyOptions(4, 'internship')">Apply Now</button>
+                    <div class="apply-options" id="apply-options-internship-4">
+                        <a th:href="@{/auth/apply-with-existing/internship/4}">Apply with Existing Resume</a>
+                        <a href="#" onclick="showCustomResumeModal(4, 'internship')">Apply with Custom Resume</a>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${internships.isEmpty()}" class="internship-card">
+                <h3>Marketing Intern</h3>
+                <p>Company: MarketPro</p>
+                <p>Location: Chicago</p>
+                <p>Description: Assist in campaign development.</p>
+                <div class="apply-container">
+                    <button class="apply-button" onclick="toggleApplyOptions(5, 'internship')">Apply Now</button>
+                    <div class="apply-options" id="apply-options-internship-5">
+                        <a th:href="@{/auth/apply-with-existing/internship/5}">Apply with Existing Resume</a>
+                        <a href="#" onclick="showCustomResumeModal(5, 'internship')">Apply with Custom Resume</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Applications Section -->
+    <section class="applications">
+        <h2>Your Applications</h2>
+        <div class="applications-grid">
+            <div th:each="app : ${applications}" class="application-card">
+                <p th:text="'Job: ' + ${app.job.title}"></p>
+                <p th:text="'Company: ' + ${app.job.company}"></p>
+                <p th:text="'Applied On: ' + ${#temporals.format(app.appliedAt, 'dd MMM yyyy')}"></p>
+                <span class="status"
+                      th:classappend="${app.status} ? ${app.status.toLowerCase()} : 'pending'"
+                      th:text="${app.status} ?: 'Pending'"></span>
+            </div>
+            <div th:if="${applications.isEmpty()}" class="application-card">
+                <p>You haven’t applied to any jobs yet.</p>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Custom Resume Modal -->
+<div class="modal" id="customResumeModal">
+    <div class="modal-content">
+        <h2>Apply with Custom Resume</h2>
+        <form id="customResumeForm" method="post">
+            <textarea name="customResume" placeholder="Paste your custom resume here..." required></textarea>
+            <div class="button-group">
+                <button type="submit" class="submit-btn">Submit</button>
+                <button type="button" class="cancel-btn" onclick="closeCustomResumeModal()">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer>
+    <p>© 2025 Automated Job Portal. All rights reserved. | <a href="#">Privacy Policy</a></p>
+</footer>
+
+<script>
+    // Toggle Logo Menu
+    function toggleLogoMenu() {
+        const menu = document.getElementById('logoMenu');
+        menu.classList.toggle('show');
+    }
+
+    // Toggle Profile Menu
+    function toggleProfileMenu() {
+        const dropdown = document.getElementById('profileDropdown');
+        dropdown.classList.toggle('show');
+    }
+
+    // Toggle Apply Options
+    function toggleApplyOptions(id, type) {
+        const options = document.getElementById(`apply-options-${type}-${id}`);
+        options.classList.toggle('show');
+    }
+
+    // Show Custom Resume Modal
+    let currentJobId = null;
+    let currentType = null;
+    function showCustomResumeModal(id, type) {
+        currentJobId = id;
+        currentType = type;
+        const modal = document.getElementById('customResumeModal');
+        const form = document.getElementById('customResumeForm');
+        form.action = `/auth/apply-with-custom${type === 'internship' ? '/internship' : ''}/${id}`;
+        modal.classList.add('show');
+    }
+
+    // Close Custom Resume Modal
+    function closeCustomResumeModal() {
+        const modal = document.getElementById('customResumeModal');
+        modal.classList.remove('show');
+        document.getElementById('customResumeForm').reset();
+        currentJobId = null;
+        currentType = null;
+    }
+
+    // Close menus and apply options when clicking outside
+    window.onclick = function(event) {
+        // Close Logo Menu
+        if (!event.target.closest('.menu-icon-container') && !event.target.closest('.logo-menu')) {
+            const logoMenu = document.getElementById('logoMenu');
+            if (logoMenu.classList.contains('show')) {
+                logoMenu.classList.remove('show');
+            }
+        }
+
+        // Close Profile Dropdown
+        if (!event.target.closest('.profile-menu') && !event.target.closest('.profile-dropdown')) {
+            const dropdowns = document.getElementsByClassName('profile-dropdown');
+            for (let i = 0; i < dropdowns.length; i++) {
+                const openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+
+        // Close Apply Options
+        if (!event.target.closest('.apply-container')) {
+            const applyOptions = document.getElementsByClassName('apply-options');
+            for (let i = 0; i < applyOptions.length; i++) {
+                const openOptions = applyOptions[i];
+                if (openOptions.classList.contains('show')) {
+                    openOptions.classList.remove('show');
+                }
+            }
+        }
+
+        // Close Custom Resume Modal
+        if (event.target.closest('.modal') && !event.target.closest('.modal-content')) {
+            closeCustomResumeModal();
+        }
+    };
+
+    // WebSocket connection for job notifications
+    const ws = new WebSocket('ws://' + window.location.host + '/ws/job-notifications');
+
+    ws.onopen = function() {
+        console.log('Connected to WebSocket server');
+        ws.send('subscribe'); // Subscribe to notifications
+    };
+
+    ws.onmessage = function(event) {
+        const notification = document.getElementById('notification');
+        const job = JSON.parse(event.data);
+        notification.innerHTML = `New Job Posted: ${job.title} at ${job.company}`;
+        notification.classList.add('show');
+        setTimeout(() => {
+            notification.classList.remove('show');
+        }, 5000); // Hide after 5 seconds
+    };
+
+    ws.onclose = function() {
+        console.log('WebSocket connection closed');
+    };
+
+    ws.onerror = function(error) {
+        console.error('WebSocket error:', error);
+    };
+</script>
+</body>
+</html>

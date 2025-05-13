@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Complete Your Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .error {
+            color: red;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<h2>Complete Your Profile</h2>
+<div th:if="${error}" class="error" th:text="${error}"></div>
+<form th:action="@{/complete-profile}" th:object="${user}" method="post">
+    <input type="hidden" th:field="*{email}"/>
+    <label for="phone">Phone Number:</label>
+    <input type="text" th:field="*{phone}" id="phone" required/>
+    <button type="submit">Submit</button>
+</form>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${resumeBuilder} ? 'Complete Profile for Resume' : 'Complete Your Profile'">Complete Your Profile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: #1A1A1A;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .main-content {
+            padding: 40px 50px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-container {
+            background: #2A2A2A;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-container h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #FF6B6B;
+            text-align: center;
+        }
+
+        .form-container h3 {
+            font-size: 1.5em;
+            margin: 20px 0 10px;
+            color: #fff;
+        }
+
+        .form-container form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-container input,
+        .form-container textarea,
+        .form-container select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #A0A0A0;
+            border-radius: 8px;
+            background: #fff;
+            font-size: 1em;
+            color: #333;
+        }
+
+        .form-container textarea {
+            resize: vertical;
+        }
+
+        .form-container button {
+            padding: 12px;
+            background: #FF6B6B;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .form-container button:hover {
+            background: #E55A5A;
+        }
+
+        .form-container a {
+            display: block;
+            margin-top: 15px;
+            color: #FF6B6B;
+            text-decoration: none;
+            text-align: center;
+            font-size: 1em;
+        }
+
+        .form-container a:hover {
+            text-decoration: underline;
+        }
+
+        .success {
+            color: #2ECC71;
+            background: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .error {
+            color: #FF5733;
+            background: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-section {
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 20px;
+            }
+
+            .form-container h2 {
+                font-size: 2em;
+            }
+
+            .form-container h3 {
+                font-size: 1.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="main-content">
+    <div class="form-container">
+        <h2 th:text="${resumeBuilder} ? 'Complete Profile for Resume' : 'Complete Your Profile'"></h2>
+        <div th:if="${success}" class="success" th:text="${success}"></div>
+        <div th:if="${error}" class="error" th:text="${error}"></div>
+        <form th:action="@{/auth/complete-profile}" method="post" th:object="${profileRequest}" enctype="multipart/form-data">
+            <div class="form-section">
+                <h3>Personal Details</h3>
+                <input type="text" th:field="*{firstName}" placeholder="First Name" required />
+                <input type="text" th:field="*{lastName}" placeholder="Last Name" />
+                <input type="text" th:field="*{address}" placeholder="Address" />
+                <input type="text" th:field="*{zipCode}" placeholder="Zip Code" />
+            </div>
+            <div class="form-section">
+                <h3>Professional Details</h3>
+                <input type="text" th:field="*{experienceLevel}" placeholder="Experience Level (e.g., Mid-Level)" />
+                <input type="text" th:field="*{areaOfInterest}" placeholder="Area of Interest (e.g., Software Development)" />
+                <input type="file" th:field="*{resume}" />
+            </div>
+            <div class="form-section">
+                <h3>Skills</h3>
+                <input type="text" th:field="*{skills}" placeholder="Enter skills (comma-separated)" required />
+            </div>
+            <div class="form-section">
+                <h3>Education History</h3>
+                <input type="text" th:field="*{educationHistory[0].degree}" placeholder="Degree" />
+                <input type="text" th:field="*{educationHistory[0].institution}" placeholder="Institution" />
+                <input type="text" th:field="*{educationHistory[0].startDate}" placeholder="Start Date (e.g., 2020-01)" />
+                <input type="text" th:field="*{educationHistory[0].endDate}" placeholder="End Date (e.g., 2022-05)" />
+            </div>
+            <div class="form-section">
+                <h3>Work Experience</h3>
+                <input type="text" th:field="*{workExperience[0].jobTitle}" placeholder="Job Title" />
+                <input type="text" th:field="*{workExperience[0].company}" placeholder="Company" />
+                <input type="text" th:field="*{workExperience[0].startDate}" placeholder="Start Date (e.g., 2022-06)" />
+                <input type="text" th:field="*{workExperience[0].endDate}" placeholder="End Date (e.g., Present)" />
+                <textarea th:field="*{workExperience[0].responsibilities}" placeholder="Responsibilities" rows="3"></textarea>
+            </div>
+            <input type="text" th:field="*{preferredRoles}" placeholder="Preferred Roles (comma-separated)" />
+            <input type="text" th:field="*{preferredLocations}" placeholder="Preferred Locations (comma-separated)" />
+            <input type="text" th:field="*{communitiesOfInterest}" placeholder="Communities of Interest (comma-separated)" />
+            <div class="form-section">
+                <h3>Additional Info</h3>
+                <select th:field="*{referralSource}">
+                    <option value="">How Did You Hear About Us?</option>
+                    <option value="Friend">Friend</option>
+                    <option value="Online">Online</option>
+                    <option value="Other">Other</option>
+                </select>
+                <input type="text" th:field="*{gender}" placeholder="Gender (optional)" />
+                <label><input type="checkbox" th:field="*{hasDisability}" /> Disability</label>
+            </div>
+            <button type="submit">Save Profile</button>
+        </form>
+        <a th:href="@{/auth/dashboard}">Back to Dashboard</a>
+    </div>
+</div>
+</body>
+</html>

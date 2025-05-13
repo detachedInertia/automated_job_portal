@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Automated Job Portal - Home</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: #1A1A1A;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background: rgba(0, 0, 0, 0.5);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 10;
+        }
+
+        nav .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #FF6B6B;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.1em;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: #FF6B6B;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070&auto=format&fit=crop') no-repeat center/cover;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        .hero h1 {
+            font-size: 4em;
+            margin-bottom: 20px;
+            z-index: 1;
+            animation: fadeInUp 1s ease forwards;
+        }
+
+        .hero p {
+            font-size: 1.5em;
+            margin-bottom: 30px;
+            z-index: 1;
+            animation: fadeInUp 1s ease forwards 0.3s;
+            opacity: 0;
+        }
+
+        .hero .cta {
+            padding: 15px 40px;
+            background: #FF6B6B;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 1.2em;
+            z-index: 1;
+            transition: transform 0.3s ease, background 0.3s ease;
+            animation: fadeInUp 1s ease forwards 0.6s;
+            opacity: 0;
+        }
+
+        .hero .cta:hover {
+            background: #E55A5A;
+            transform: scale(1.05);
+        }
+
+        .features {
+            padding: 80px 50px;
+            text-align: center;
+        }
+
+        .features h2 {
+            font-size: 2.5em;
+            margin-bottom: 50px;
+            color: #FF6B6B;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: #2A2A2A;
+            padding: 30px;
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .feature-card h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .feature-card p {
+            font-size: 1.1em;
+            color: #BBBBBB;
+        }
+
+        footer {
+            padding: 30px 50px;
+            text-align: center;
+            background: #111;
+        }
+
+        footer p {
+            font-size: 1em;
+            color: #888;
+        }
+
+        footer a {
+            color: #FF6B6B;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 20px;
+            }
+
+            nav ul {
+                gap: 15px;
+            }
+
+            .hero h1 {
+                font-size: 2.5em;
+            }
+
+            .hero p {
+                font-size: 1.2em;
+            }
+
+            .hero .cta {
+                padding: 10px 30px;
+                font-size: 1em;
+            }
+
+            .features {
+                padding: 50px 20px;
+            }
+
+            .features h2 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+<nav>
+    <div class="logo">Career Connect</div>
+
+</nav>
+
+<section class="hero">
+    <h1>Welcome to Career Connect</h1>
+    <p>Find your dream job or hire top talent effortlessly</p>
+    <a th:href="@{/login-email}" class="cta">Get Started</a>
+</section>
+
+<section class="features">
+    <h2>Why Choose Us</h2>
+    <div class="features-grid">
+        <div class="feature-card">
+            <h3>Smart Job Matching</h3>
+            <p>Our AI-powered system connects you with jobs that match your skills and preferences.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Easy Applications</h3>
+            <p>Apply to jobs with a single click and track your application status in real-time.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Employer Dashboard</h3>
+            <p>Employers can manage postings and connect with top candidates seamlessly.</p>
+        </div>
+    </div>
+</section>
+<footer>
+    <p>© 2025 Career Connect. All rights reserved. | <a href="#">Privacy Policy</a></p>
+</footer>
+
+<script>
+    document.querySelectorAll('nav ul li a').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (href.startsWith('#')) {
+                e.preventDefault();
+                const targetId = href.substring(1);
+                const targetSection = document.querySelector(targetId);
+                if (targetSection) {
+                    window.scrollTo({
+                        top: targetSection.offsetTop - 70,
+                        behavior: 'smooth'
+                    });
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>

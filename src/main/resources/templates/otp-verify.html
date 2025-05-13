@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Verify OTP - Job Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: #333;
+        }
+        .job-portal-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .job-portal-container h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            font-weight: 600;
+        }
+        .job-portal-container p {
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+        .job-portal-container form {
+            display: flex;
+            flex-direction: column;
+        }
+        .job-portal-container input[type="text"] {
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+        .job-portal-container input[type="text"]:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+        }
+        .job-portal-container button {
+            padding: 12px;
+            background: linear-gradient(90deg, #3498db, #8e44ad);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+        .job-portal-container button:hover {
+            background: linear-gradient(90deg, #2980b9, #8e44ad);
+            transform: translateY(-2px);
+        }
+        .job-portal-container button:active {
+            transform: translateY(0);
+        }
+        .error {
+            color: #e74c3c;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+        .job-icon {
+            width: 60px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+        }
+    </style>
+</head>
+<body>
+<div class="job-portal-container">
+    <img src="https://img.icons8.com/ios-filled/50/2c3e50/job.png" alt="Job Icon" class="job-icon">
+    <h2>Verify Your OTP</h2>
+    <p>Please enter the OTP sent to your phone <span th:text="${identifier}"></span></p>
+    <form th:action="@{/auth/verify-otp}" th:object="${otpVerificationRequest}" method="post">
+        <input type="hidden" th:value="${identifier}" th:field="*{identifier}"/>
+        <input type="text" th:field="*{otp}" placeholder="Enter OTP here" required/>
+        <div th:errors="*{otp}" class="error"></div>
+        <button type="submit">Verify OTP</button>
+    </form>
+    <div th:if="${error}" class="error">
+        <p th:text="${error}"></p>
+    </div>
+</div>
+</body>
+</html>

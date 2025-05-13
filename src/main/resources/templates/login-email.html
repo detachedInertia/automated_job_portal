@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign In - Automated Job Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #1F2527;
+            overflow: hidden;
+        }
+        .container {
+            display: flex;
+            width: 800px;
+            max-width: 90%;
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        .left-section {
+            flex: 1;
+            background: #2C3436;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .right-section {
+            flex: 1;
+            background: linear-gradient(135deg, #2A98B6, #B6E6EC);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .left-section h2 {
+            color: #fff;
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 30px;
+        }
+        .social-login {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .social-login a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: #fff;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+        .social-login a:hover {
+            transform: scale(1.1);
+        }
+        .social-login img {
+            width: 24px;
+            height: 24px;
+        }
+        .divider {
+            position: relative;
+            text-align: center;
+            color: #A0A0A0;
+            margin: 20px 0;
+        }
+        .divider::before,
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background: #A0A0A0;
+        }
+        .divider::before {
+            left: 0;
+        }
+        .divider::after {
+            right: 0;
+        }
+        .left-section form {
+            display: flex;
+            flex-direction: column;
+        }
+        .left-section input[type="text"],
+        .left-section input[type="password"] {
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #A0A0A0;
+            border-radius: 8px;
+            background: #fff;
+            font-size: 1em;
+            color: #333;
+        }
+        .left-section input[type="text"]::placeholder,
+        .left-section input[type="password"]::placeholder {
+            color: #A0A0A0;
+        }
+        .otp-login, .forgot-password {
+            color: #A0A0A0;
+            font-size: 0.9em;
+            text-align: right;
+            margin: 5px 0;
+            text-decoration: none;
+        }
+        .otp-login:hover, .forgot-password:hover {
+            color: #fff;
+        }
+        .left-section button {
+            padding: 12px;
+            background: #FF5733;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            margin-top: 10px;
+        }
+        .left-section button:hover {
+            background: #E64A2F;
+        }
+        .right-section .welcome-text {
+            margin-bottom: 20px;
+        }
+        .right-section .welcome-text span {
+            display: block;
+            color: #fff;
+            font-weight: 700;
+            text-transform: uppercase;
+            opacity: 0;
+            transform: scale(0.5);
+        }
+        .right-section .welcome-text span.welcome {
+            font-size: 2.2em;
+            animation: popUp 0.8s ease forwards;
+        }
+        .right-section .welcome-text span.to {
+            font-size: 1.8em;
+            animation: popUp 0.8s ease forwards 0.3s;
+        }
+        .right-section .welcome-text span.job-portal {
+            font-size: 2.2em;
+            animation: popUp 0.8s ease forwards 0.6s;
+        }
+        @keyframes popUp {
+            0% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            70% {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .right-section p {
+            color: #fff;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+        }
+        .right-section a {
+            padding: 12px 30px;
+            background: transparent;
+            color: #fff;
+            border: 2px solid #fff;
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 1.1em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        .right-section a:hover {
+            background: #fff;
+            color: #2A98B6;
+        }
+        .error {
+            color: #FF5733;
+            background: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .success {
+            color: #2ECC71;
+            background: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                max-width: 95%;
+            }
+            .left-section, .right-section {
+                padding: 30px;
+            }
+            .left-section h2 {
+                font-size: 1.8em;
+            }
+            .right-section .welcome-text span.welcome,
+            .right-section .welcome-text span.job-portal {
+                font-size: 1.8em;
+            }
+            .right-section .welcome-text span.to {
+                font-size: 1.5em;
+            }
+            .right-section p {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="left-section">
+        <h2>Sign In</h2>
+        <div class="social-login">
+            <a th:href="@{/oauth2/authorization/github}">
+                <img src="https://img.icons8.com/ios-glyphs/24/000000/github.png" alt="GitHub Logo">
+            </a>
+            <a th:href="@{/oauth2/authorization/google}">
+                <img src="https://img.icons8.com/color/24/000000/google-logo.png" alt="Google Logo">
+            </a>
+        </div>
+        <div class="divider">or</div>
+        <div th:if="${param.error}" class="error">
+            Oops! Wrong email/phone or password. If you signed up with GitHub/Google or OTP, use those methods or <a th:href="@{/auth/forgot-password}">reset your password</a>.
+        </div>
+        <div th:if="${param.logout}" class="success">
+            You're logged out! See you soon!
+        </div>
+        <div th:if="${param.signupSuccess}" class="success">
+            Welcome aboard! Log in with your email: <span th:text="${param.email}"></span>
+        </div>
+        <form th:action="@{/auth/form-login}" method="post">
+            <a th:href="@{/auth/otp-login}" class="otp-login">Login through OTP</a>
+            <input type="text" name="email" placeholder="Email or Phone" th:value="${param.email}" required />
+            <input type="password" name="password" placeholder="Password" required />
+            <a th:href="@{/auth/forgot-password}" class="forgot-password">Forgot Your Password?</a>
+            <button type="submit">SIGN IN</button>
+        </form>
+    </div>
+    <div class="right-section">
+        <div class="welcome-text">
+            <span class="welcome">WELCOME</span>
+            <span class="to">TO</span>
+            <span class="job-portal">CareerConnect</span>
+        </div>
+        <p>Enter your details and start journey with us</p>
+        <a th:href="@{/signup}">SIGN UP</a>
+    </div>
+</div>
+</body>
+</html>

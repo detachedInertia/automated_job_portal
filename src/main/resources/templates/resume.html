@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Resume - Automated Job Portal</title>
+  <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Arial', sans-serif;
+    }
+
+    body {
+        background: #1A1A1A;
+        color: #fff;
+        overflow-x: hidden;
+    }
+
+    .main-content {
+        padding: 40px 50px;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .resume-container {
+        background: #2A2A2A;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .resume-container h1 {
+        font-size: 2.5em;
+        margin-bottom: 20px;
+        color: #FF6B6B;
+        text-align: center;
+    }
+
+    .resume-container h2 {
+        font-size: 1.5em;
+        margin: 20px 0 10px;
+        color: #fff;
+    }
+
+    .resume-container p, .resume-container li {
+        font-size: 1em;
+        margin-bottom: 10px;
+        color: #BBBBBB;
+    }
+
+    .resume-container ul {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .resume-container .section {
+        margin-bottom: 20px;
+    }
+
+    .resume-container a {
+        display: inline-block;
+        padding: 10px 20px;
+        background: #FF6B6B;
+        color: white;
+        text-decoration: none;
+        border-radius: 25px;
+        font-size: 1em;
+        margin-top: 20px;
+        transition: background 0.3s ease;
+    }
+
+    .resume-container a:hover {
+        background: #E55A5A;
+    }
+
+    @media (max-width: 768px) {
+        .main-content {
+            padding: 20px;
+        }
+
+        .resume-container h1 {
+            font-size: 2em;
+        }
+
+        .resume-container h2 {
+            font-size: 1.2em;
+        }
+    }
+  </style>
+</head>
+<body>
+<div class="main-content">
+  <div class="resume-container">
+    <h1 th:text="${user.firstName} + ' ' + ${user.lastName} ?: 'Your Resume'"></h1>
+
+    <div class="section">
+      <h2>Contact Information</h2>
+      <p th:text="'Email: ' + ${user.email}"></p>
+      <p th:text="'Phone: ' + ${user.phone}"></p>
+      <p th:text="'Address: ' + ${user.address}"></p>
+      <p th:if="${user.zipCode}" th:text="'Zip Code: ' + ${user.zipCode}"></p>
+    </div>
+
+    <div class="section">
+      <h2>Professional Details</h2>
+      <p th:if="${user.experienceLevel}" th:text="'Experience Level: ' + ${user.experienceLevel}"></p>
+      <p th:if="${user.areaOfInterest}" th:text="'Area of Interest: ' + ${user.areaOfInterest}"></p>
+    </div>
+
+    <div class="section">
+      <h2>Skills</h2>
+      <ul>
+        <li th:each="skill : ${user.skills}" th:text="${skill}"></li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Education</h2>
+      <ul>
+        <li th:each="edu : ${user.educationHistory}">
+          <span th:text="${edu.degree} + ' at ' + ${edu.institution} + ' (' + ${edu.startDate} + ' - ' + ${edu.endDate} + ')'"></span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Work Experience</h2>
+      <ul>
+        <li th:each="work : ${user.workExperience}">
+          <span th:text="${work.jobTitle} + ' at ' + ${work.company} + ' (' + ${work.startDate} + ' - ' + ${work.endDate} + ')'"></span>
+          <p th:text="'Responsibilities: ' + ${work.responsibilities}"></p>
+        </li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Additional Info</h2>
+      <p th:if="${user.referralSource}" th:text="'Referral Source: ' + ${user.referralSource}"></p>
+      <p th:if="${user.gender}" th:text="'Gender: ' + ${user.gender}"></p>
+      <p th:if="${user.hasDisability}" th:text="'Disability: Yes'"></p>
+    </div>
+
+    <a th:href="@{/auth/dashboard}" class="button">Back to Dashboard</a>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login with OTP</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .otp-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        .otp-container input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        .otp-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .otp-container button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="otp-container">
+    <h2>Login with OTP</h2>
+    <form th:action="@{/api/auth/request-otp}" th:object="${otpRequest}" method="post">
+        <input type="text" th:field="*{identifier}" placeholder="Email or Phone"/>
+        <div th:errors="*{identifier}" style="color:red;"></div>
+        <button type="submit">Request OTP</button>
+    </form>
+    <div th:if="${error}">
+        <p th:text="${error}" style="color:red;"></p>
+    </div>
+</div>
+</body>
+</html>

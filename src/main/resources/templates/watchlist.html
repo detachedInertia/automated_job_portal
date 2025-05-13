@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Watchlist</title>
+</head>
+<body>
+<h1>Your Watchlist</h1>
+<div th:if="${watchlist.isEmpty()}">
+    <p>Your watchlist is empty.</p>
+</div>
+<div th:unless="${watchlist.isEmpty()}">
+    <div th:each="entry : ${watchlist}">
+        <h3 th:text="${entry.job.title}"></h3>
+        <p th:text="'Company: ' + ${entry.job.company}"></p>
+        <p th:text="'Location: ' + ${entry.job.location}"></p>
+    </div>
+</div>
+</body>
+</html>

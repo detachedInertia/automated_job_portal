@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .signup-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        .signup-container h2 {
+            margin-bottom: 20px;
+        }
+        .signup-container input,
+        .signup-container select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        .signup-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .signup-container button:hover {
+            background-color: #0056b3;
+        }
+        .signup-container a {
+            display: block;
+            margin-top: 10px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .signup-container a:hover {
+            text-decoration: underline;
+        }
+        .error {
+            color: red;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .field-error {
+            color: red;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+<div class="signup-container">
+    <h2>Sign Up</h2>
+    <div th:if="${error}" class="error" th:text="${error}"></div>
+    <form th:action="@{/signup}" method="post" th:object="${signupRequest}">
+        <div>
+            <input type="email" th:field="*{email}" placeholder="Email" required />
+            <div th:if="${#fields.hasErrors('email')}" class="field-error" th:errors="*{email}"></div>
+        </div>
+        <div>
+            <input type="text" th:field="*{phone}" placeholder="Phone Number (e.g., +1234567890)" required />
+            <div th:if="${#fields.hasErrors('phone')}" class="field-error" th:errors="*{phone}"></div>
+        </div>
+        <div>
+            <input type="password" th:field="*{password}" placeholder="Password" required />
+            <div th:if="${#fields.hasErrors('password')}" class="field-error" th:errors="*{password}"></div>
+        </div>
+        <div>
+            <select th:field="*{role}">
+                <option value="USER">User</option>
+                <option value="EMPLOYER">Employer</option>
+                <option value="ADMIN">Admin</option>
+            </select>
+            <div th:if="${#fields.hasErrors('role')}" class="field-error" th:errors="*{role}"></div>
+        </div>
+        <button type="submit">Sign Up</button>
+    </form>
+    <a th:href="@{/login-email}">Already have an account? Log in</a>
+</div>
+</body>
+</html>
